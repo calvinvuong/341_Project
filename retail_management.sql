@@ -23,8 +23,8 @@ DROP TABLE IF EXISTS `allowed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `allowed` (
-  `employee_id` char(32) NOT NULL,
-  `permission_id` char(32) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
   PRIMARY KEY (`employee_id`,`permission_id`),
   KEY `permission_id` (`permission_id`),
   CONSTRAINT `allowed_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
@@ -49,12 +49,12 @@ DROP TABLE IF EXISTS `bought_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bought_items` (
-  `customer_id` char(32) NOT NULL,
-  `item_id` char(32) NOT NULL,
-  PRIMARY KEY (`customer_id`,`item_id`),
-  KEY `item_id` (`item_id`),
-  CONSTRAINT `bought_items_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
-  CONSTRAINT `bought_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`)
+  `item_id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  PRIMARY KEY (`item_id`,`customer_id`),
+  KEY `customer_id` (`customer_id`),
+  CONSTRAINT `bought_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
+  CONSTRAINT `bought_items_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -75,7 +75,7 @@ DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer` (
-  `id` char(32) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) DEFAULT NULL,
   `credit_card_num` char(16) DEFAULT NULL,
   `street_address` varchar(25) DEFAULT NULL,
@@ -102,9 +102,11 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employee` (
-  `id` char(32) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) DEFAULT NULL,
   `position` varchar(35) DEFAULT NULL,
+  `password` varchar(25) DEFAULT NULL,
+  `username` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -126,7 +128,7 @@ DROP TABLE IF EXISTS `items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `items` (
-  `id` char(32) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) DEFAULT NULL,
   `price` float DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
@@ -151,7 +153,7 @@ DROP TABLE IF EXISTS `location`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `location` (
-  `id` char(32) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `street_address` varchar(25) DEFAULT NULL,
   `city` varchar(15) DEFAULT NULL,
   `state` char(2) DEFAULT NULL,
@@ -176,7 +178,7 @@ DROP TABLE IF EXISTS `permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permission` (
-  `id` char(32) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -199,12 +201,12 @@ DROP TABLE IF EXISTS `stores`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stores` (
-  `location_id` char(32) NOT NULL,
-  `item_id` char(32) NOT NULL,
-  PRIMARY KEY (`location_id`,`item_id`),
-  KEY `item_id` (`item_id`),
-  CONSTRAINT `stores_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`),
-  CONSTRAINT `stores_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`)
+  `item_id` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL,
+  PRIMARY KEY (`item_id`,`location_id`),
+  KEY `location_id` (`location_id`),
+  CONSTRAINT `stores_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
+  CONSTRAINT `stores_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -225,8 +227,8 @@ DROP TABLE IF EXISTS `works_at`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `works_at` (
-  `employee_id` char(32) NOT NULL,
-  `location_id` char(32) NOT NULL,
+  `employee_id` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL,
   PRIMARY KEY (`employee_id`,`location_id`),
   KEY `location_id` (`location_id`),
   CONSTRAINT `works_at_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
@@ -252,4 +254,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-21 13:02:48
+-- Dump completed on 2018-11-21 13:40:51
