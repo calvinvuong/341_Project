@@ -1,16 +1,19 @@
 <html>
     <head>
-        <title>Employee Dashboard</title>
+        <title>Create Store</title>
     </head>
     <body>
-      <p> {{data['message']}} </p>
       <p> Hello. You are logged in as employee: {{data['name']}}, {{data['position']}} </p>
 
+      New store
       <form action="/create_store.html" method="post">
-	<button type="submit">Create a new store</button>
+	Name:<input type="text" name="store_name"> <br>
+	Address:<input type="text" name="address"> <br>
+	City:<input type="text" name="city"> <br>
+	State:<input type="text" name="state"> <br>
+	<button type="submit">Create</button>
       </form>
-
-
+      
       <form action="/logout.html" method="post">
 	<button type="submit">Logout</button>
       </form>

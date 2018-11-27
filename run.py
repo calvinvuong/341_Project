@@ -34,13 +34,10 @@ def sql_execute(sql):
 # For this example you can select a handler function by
 # uncommenting one of the @app.route decorators.
 
-#@app.route('/')
-def basic_response():
-    return "It works!" #example
 
 @app.route('/')
 def template_response():
-    return render_template('landing.html', name = random.randint(0,4))
+    return render_template('landing.html');
 
 @app.route('/register_customer.html', methods=['GET', 'POST'])
 def customer_register():
@@ -50,7 +47,7 @@ def customer_register():
     existing_usernames = sql_query(sql_string)
 
     for a in existing_usernames:
-        if request.form["username"] in a[0]:
+        if request.form["username"] == a[0]:
             # return to landing page, taken username
             return render_template('landing.html', success="Username already taken.");
         
@@ -65,12 +62,12 @@ def employee_register():
     # check no duplicate username
     sql_string = "select username from employee"
     existing_usernames = sql_query(sql_string)
-
+    
     for a in existing_usernames:
-        if request.form["username"] in a[0]:
+        if request.form["username"] == a[0]:
             # return to landing page, taken username
             return render_template('landing.html', success="Username already taken.")
-
+        
     sql_string = "insert into employee (name, position, username, password) values ('%s', '%s', '%s', '%s')" %(request.form["name"], request.form["position"], request.form["username"], request.form["password"])
 
     sql_execute(sql_string)
@@ -85,24 +82,69 @@ def login():
         session.clear()
         return render_template('landing.html', success="Invalid username or password.")
     else:
+        # set cookie information
         session.clear()
         session["username"] = request.form["username"]
         session["role"] = request.form["role"]
+    
         sql_string = "select id, name from %s where username='%s'" %(request.form["role"], request.form["username"])
         name_id = sql_query(sql_string);
         session["id"] = name_id[0][0];
         session["name"] = name_id[0][1];
-        
+
+        if ( session["role"] == "employee" ):
+            sql_string = "select position from employee where id=%s" %(session["id"])
+            session["position"] = sql_query(sql_string)[0][0];
+            
+        # add position if user is an employee
         if request.form["role"] == "customer":
             return render_template('customer_dashboard.html', name=session["name"])#name=request.form["name"])
         elif request.form["role"] == "employee":
-            return render_template('employee_dashboard.html', name=session["name"])#name=request.form["name"])
+            return load_employee_dashboard()
+            #return render_template('employee_dashboard.html', name=session["name"])#name=request.form["name"])
 
+@app.route('/employee_dashboard.html', methods=['GET', 'POST'])
+def load_employee_dashboard():
+    template_data = load_session_info();
+    template_data["position"] = session.get("position")
+
+    '''
+    if session.get("position") == "manager":
+        return load_manager_dashboard()
+    elif session.get("position") == "retail":
+        return load_retail_dashboard()
+    '''
+    return render_template('employee_dashboard.html', data = template_data)
+
+@app.route('/create_store.html', methods=['GET', 'POST'])
+def create_store():
+    template_data = load_session_info();
+    template_data["position"] = session.get("position")
+    
+    # create store using sql
+    if "store_name" in request.form:
+        sql_string = "insert into location (name, street_address, city, state) values ('%s', '%s', '%s', '%s')" %(request.form["store_name"], request.form["address"], request.form["city"], request.form["state"])
+        sql_execute(sql_string)
+
+        template_data['message'] = "Created new store."
+        return render_template('employee_dashboard.html', data = template_data)
+    
+    # render form to choose store name
+    else:
+        return render_template('create_store.html', data = template_data)
+            
 @app.route('/logout.html', methods=['GET', 'POST'])
 def logout():
     session.clear()
     return render_template('landing.html', success='Successfully logged out.')
-    
+
+def load_session_info():
+    template_data = {}
+    template_data["name"] = session.get("name")
+    template_data["role"] = session.get("role")
+
+    return template_data
+
 #@app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
     print(request.form)
