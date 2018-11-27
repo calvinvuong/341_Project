@@ -81,6 +81,8 @@ CREATE TABLE `customer` (
   `street_address` varchar(25) DEFAULT NULL,
   `city` varchar(15) DEFAULT NULL,
   `state` char(2) DEFAULT NULL,
+  `username` varchar(25) DEFAULT NULL,
+  `password` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -254,4 +256,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-21 13:40:51
+-- Dump completed on 2018-11-26 18:27:56

@@ -3,9 +3,36 @@
         <title>Home Page</title>
     </head>
     <body>
-      <p> Hello. {{name}} </p>
-      <form action="/register.html" method="post">
-	<input type="text" placeholder="enter" name="username">
+      <p> Hello. </p>
+      <p> {{success}} </p>
+      <h2> Create an account. </h2>
+      <h3>Customer account.</h3>
+      <form action="/register_customer.html" method="post">
+	Enter username: <input type="text" placeholder="enter" name="username"> <br>
+	Enter password: <input type="password" name="password"> <br>
+	Enter name: <input type="text" name="name"> <br>
+	Enter credit card num: <input type="text" name="credit_card_num"> <br>
+	Enter street address: <input type="text" name="street_address"> <br>
+	Enter city: <input type="text" name="city"> <br>
+	Enter state: <input type="text" name="state"> <br>
+	<button type="submit">Create account</button>
+      </form>
+
+      <h3>Employee account.</h3>
+      <form action="/register_employee.html" method="post">
+	Enter username: <input type="text" placeholder="enter" name="username"> <br>
+	Enter password: <input type="password" name="password"> <br>
+	Enter name: <input type="text" name="name"> <br>
+	Enter position: <input type="text" name="position"> <br>
+	<button type="submit">Create account</button>
+      </form>
+
+      <br> <br>
+      <h2>Login.</h2>
+      <form action="/login.html" method="post">
+	Enter username: <input type="text" placeholder="enter" name="username"> <br>
+	Enter password: <input type="password" name="password"> <br>
+	Account type: <input type="radio" name="role" value="customer">   Customer <input type="radio" name="role" value="employee"> Employee <br>
 	<button type="submit">Login</button>
       </form>
       
