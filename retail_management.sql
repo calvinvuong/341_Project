@@ -111,7 +111,7 @@ CREATE TABLE `employee` (
   `password` varchar(25) DEFAULT NULL,
   `username` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -120,7 +120,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'Calvin','manager','','calvin_boss'),(2,'Bim','retail','nani','bibbi');
+INSERT INTO `employee` VALUES (1,'Calvin','manager','','calvin_boss'),(2,'Bim','retail','nani','bibbi'),(3,'TEsting','manager','orange','testingaccount'),(4,'Kraus','manager','apples','boss');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,8 +161,9 @@ CREATE TABLE `location` (
   `street_address` varchar(25) DEFAULT NULL,
   `city` varchar(15) DEFAULT NULL,
   `state` char(2) DEFAULT NULL,
+  `name` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,6 +172,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
+INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff');
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,4 +260,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-26 20:44:49
+-- Dump completed on 2018-11-27 17:36:49
