@@ -85,7 +85,7 @@ CREATE TABLE `customer` (
   `username` varchar(25) DEFAULT NULL,
   `password` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'Bob','666','elm street','atlanta','GA','bobbo','abc123'),(9,'prom','8823','hello street','end','NY','blah','dsf');
+INSERT INTO `customer` VALUES (1,'Bob','666','elm street','atlanta','GA','bobbo','abc123'),(9,'prom','8823','hello street','end','NY','blah','dsf'),(10,'Hield','93042','dsfnksr','sdfk','OH','unique','blah'),(11,'Poof','9038','jkdsf','apodf','AK','poof','jhiu');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,7 +112,7 @@ CREATE TABLE `employee` (
   `password` varchar(25) DEFAULT NULL,
   `username` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +121,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'Calvin','manager','','calvin_boss'),(2,'Bim','retail','nani','bibbi'),(3,'TEsting','manager','orange','testingaccount'),(4,'Kraus','manager','apples','boss');
+INSERT INTO `employee` VALUES (1,'Calvin','manager','','calvin_boss'),(2,'Bim','retail','nani','bibbi'),(3,'TEsting','manager','orange','testingaccount'),(4,'Kraus','manager','apples','boss'),(5,'Charles','manager','darwin','charles'),(6,'Cr','manager','blue','crew');
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +138,7 @@ CREATE TABLE `items` (
   `price` float DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,6 +147,7 @@ CREATE TABLE `items` (
 
 LOCK TABLES `items` WRITE;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
+INSERT INTO `items` VALUES (1,'Milk',2.05,0),(2,'Corn',1.03,0),(3,'Baloney',5,0),(4,'Chips',1.59,0);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,6 +225,7 @@ CREATE TABLE `stores` (
 
 LOCK TABLES `stores` WRITE;
 /*!40000 ALTER TABLE `stores` DISABLE KEYS */;
+INSERT INTO `stores` VALUES (1,1,10),(1,2,5),(1,3,8),(2,1,8),(2,2,5),(2,3,35),(4,1,80),(4,2,5),(4,3,200);
 /*!40000 ALTER TABLE `stores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,4 +264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-27 19:20:15
+-- Dump completed on 2018-11-28  0:42:30
