@@ -20,6 +20,10 @@
 
       {# choose drop quantity for each store #}
       {% elif data['choose_quantities'] == True %}
+
+      {% if data['store_quantities']|length == 0 %}
+      <p> The store does not carry this item. Nothing to drop. </p>
+      {% else %}
       <form action="/trash_item.html" method="post">
 	Dropping item: {{ data['item_name'] }} <br>
 	Stores:
@@ -34,7 +38,7 @@
 	<input type="hidden" name="item_id" value="{{ data['item_id'] }}">
 	<button type="submit">Submit</button>
       </form>
-
+      {% endif %}
       {% endif %}
       
       <form action="/employee_dashboard.html" method="post">

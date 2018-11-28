@@ -14,7 +14,20 @@
 	</li>
 	{% endfor %}
       </ul>
-	
+
+      {% if data['item_list']|length == 0 %}
+      <p> No items to show. </p>
+
+      {% else %}
+      <ul>
+	{% for tuple in data['item_list'] %}
+	<li style="list-style: none">
+	  {{ tuple[0] }} store stock: {{ tuple[1] }} price: {{ tuple[2] }}
+	</li>
+	{% endfor %}
+      </ul>
+      {% endif %}
+      
       <form action="/show_stores.html" method="post">
 	<button type="submit">Show stores</button>
       </form>

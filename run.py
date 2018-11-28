@@ -146,6 +146,14 @@ def view_store():
     sql_string = "select name, street_address, city, state from location where id=%s" %(store_id)
     template_data["store_info"] = sql_query(sql_string)[0]
 
+    # display list of items, quantity, and price
+    sql_string = '''select name, stores.quantity, price
+from stores cross join items
+where location_id=%s and items.id=item_id''' %(store_id)
+    item_list = sql_query(sql_string)
+    
+    template_data['item_list'] = item_list
+    
     return render_template('view_store.html', data = template_data)
 
 @app.route('/create_store.html', methods=['GET', 'POST'])
