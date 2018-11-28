@@ -51,6 +51,7 @@ DROP TABLE IF EXISTS `bought_items`;
 CREATE TABLE `bought_items` (
   `item_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
+  `purchase_price` float DEFAULT NULL,
   PRIMARY KEY (`item_id`,`customer_id`),
   KEY `customer_id` (`customer_id`),
   CONSTRAINT `bought_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
@@ -163,7 +164,7 @@ CREATE TABLE `location` (
   `state` char(2) DEFAULT NULL,
   `name` varchar(25) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -172,7 +173,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff');
+INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff'),(2,'euclid','Cleveland','OH','kenko'),(3,'fields','Cleveland','OH','costco');
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,6 +210,7 @@ DROP TABLE IF EXISTS `stores`;
 CREATE TABLE `stores` (
   `item_id` int(11) NOT NULL,
   `location_id` int(11) NOT NULL,
+  `quantity` int(11) DEFAULT NULL,
   PRIMARY KEY (`item_id`,`location_id`),
   KEY `location_id` (`location_id`),
   CONSTRAINT `stores_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
@@ -260,4 +262,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-27 17:36:49
+-- Dump completed on 2018-11-27 19:20:15
