@@ -16,32 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `allowed`
---
-
-DROP TABLE IF EXISTS `allowed`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `allowed` (
-  `employee_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`employee_id`,`permission_id`),
-  KEY `permission_id` (`permission_id`),
-  CONSTRAINT `allowed_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
-  CONSTRAINT `allowed_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `allowed`
---
-
-LOCK TABLES `allowed` WRITE;
-/*!40000 ALTER TABLE `allowed` DISABLE KEYS */;
-/*!40000 ALTER TABLE `allowed` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `bought_items`
 --
 
@@ -49,13 +23,14 @@ DROP TABLE IF EXISTS `bought_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `bought_items` (
-  `item_id` int(11) NOT NULL,
-  `customer_id` int(11) NOT NULL,
-  `purchase_price` float DEFAULT NULL,
-  PRIMARY KEY (`item_id`,`customer_id`),
+  `purchase_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`purchase_id`),
   KEY `customer_id` (`customer_id`),
-  CONSTRAINT `bought_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
-  CONSTRAINT `bought_items_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`)
+  KEY `item_id` (`item_id`),
+  CONSTRAINT `bought_items_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
+  CONSTRAINT `bought_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -136,7 +111,6 @@ CREATE TABLE `items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(25) DEFAULT NULL,
   `price` float DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -147,7 +121,7 @@ CREATE TABLE `items` (
 
 LOCK TABLES `items` WRITE;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
-INSERT INTO `items` VALUES (1,'Milk',2.05,0),(2,'Corn',1.03,0),(3,'Baloney',5,0),(4,'Chips',1.59,0);
+INSERT INTO `items` VALUES (1,'Milk',2.05),(2,'Corn',1.03),(3,'Baloney',5),(4,'Chips',1.59);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -176,29 +150,6 @@ LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
 INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff'),(2,'euclid','Cleveland','OH','kenko'),(3,'fields','Cleveland','OH','costco');
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `permission`
---
-
-DROP TABLE IF EXISTS `permission`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `permission`
---
-
-LOCK TABLES `permission` WRITE;
-/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
-/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -264,4 +215,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-28 18:08:50
+-- Dump completed on 2018-11-28 18:43:53
