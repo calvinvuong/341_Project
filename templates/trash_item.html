@@ -6,6 +6,7 @@
       <p> {{data['message']}} </p>
       <p> Hello. You are logged in as employee: {{data['name']}}, {{data['position']}} </p>
 
+      {# choose item #}
       {% if data['choose_item'] == True %}
       <form action="/trash_item.html" method="post">
 	Select item:
@@ -16,24 +17,21 @@
 	</select>
 	<button type="submit">Submit</button>
       </form>
-      
-      {% else %}
-      <form action="/stock_item.html" method="post">
-	Select item:
-	<select name="item_id">
-	  {% for item in data['item_list'] %}
-	  <option value="{{ item[0] }}">{{ item[1] }}</option> <br>
-	  {% endfor %}
-	</select>
 
+      {# choose drop quantity for each store #}
+      {% elif data['choose_quantities'] == True %}
+      <form action="/trash_item.html" method="post">
+	Dropping item: {{ data['item_name'] }} <br>
 	Stores:
 	<ul>
-	  {% for store in data['store_list'] %}
+	  {% for tuple in data['store_quantities'] %}
 	  <li>
-	    {{ store[1] }} <input type="number" name="{{ store[0] }}_quantity" value="0">
+	    {{ tuple[1] }} current stock: {{ tuple[2] }} <input type="number" name="{{ tuple[0] }}_quantity" min="0" max="{{ tuple[2] }}" value="0">
 	  </li>
 	  {% endfor %}
 	</ul>
+	<input type="hidden" name="ready to drop" value="true">
+	<input type="hidden" name="item_id" value="{{ data['item_id'] }}">
 	<button type="submit">Submit</button>
       </form>
 

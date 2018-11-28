@@ -243,13 +243,50 @@ def trash_item():
     template_data = load_session_info()
     template_data["position"] = session.get("position")
 
+    # execute sql to trash items
+    if "ready to drop" in request.form:
+        print(request.form)
+        for store_id_raw, quantity in request.form.items():
+            if store_id_raw != "ready to drop" and store_id_raw != "item_id": # ignore the confirmation key
+                store_id = store_id_raw.split("_", 1)[0]
+
+                sql_string = "select quantity from stores where item_id=%s and location_id=%s" %( request.form["item_id"], store_id)
+                prev_quantity = sql_query(sql_string)[0][0]
+
+                quantity_str = "%s_quantity" %(store_id) 
+                item_quantity = request.form[quantity_str] # quantiity to remove
+
+                new_quantity = int(prev_quantity) - int(item_quantity)
+                #  if all items dropped, just remove the item from stores table
+                if ( new_quantity <= 0 ):
+                    sql_string = "delete from stores where item_id=%s and location_id=%s" %(request.form["item_id"], store_id)
+                    sql_execute(sql_string)
+                else:
+                    sql_string = "update stores set quantity=%s where item_id=%s and location_id=%s" %(new_quantity, request.form["item_id"], store_id)
+                    sql_execute(sql_string)
+
+        template_data['message'] = "Item trashed."
+        return render_template('employee_dashboard.html', data = template_data)
+    
     # render form to choose quantities
-    if "item_id" in request.form:
+    elif "item_id" in request.form:
         print("select quantities")
         template_data['choose_item'] = False;
         template_data['choose_quantities'] = True;
 
-        sql_string = "select"
+        # item name to drop
+        sql_string = "select name from items where id=%s" %(request.form["item_id"])
+        template_data['item_id'] = request.form["item_id"]
+        template_data['item_name'] = sql_query(sql_string)[0][0]
+        
+        sql_string = '''select location_id, name, quantity 
+from (stores cross join location) 
+where item_id=%s and location_id = location.id''' %(request.form["item_id"])
+        #print(sql_query(sql_string));
+        template_data['store_quantities'] = sql_query(sql_string) # list of tuples
+
+        return render_template('trash_item.html', data = template_data)
+        
     # render form to choose item 
     else:
         sql_string = "select id, name from items"
