@@ -43,14 +43,16 @@ def template_response():
 def customer_register():
     print(request.form)
     # check no duplicate username
-    sql_string = "select username from customer"
-    existing_usernames = sql_query(sql_string)
+    sql_string = "select username from customer where username='%s'" %(request.form["username"])
+    existing_usernames1 = sql_query(sql_string)
 
-    for a in existing_usernames:
-        if request.form["username"] == a[0]:
-            # return to landing page, taken username
-            return render_template('landing.html', success="Username already taken.");
-        
+    sql_string = "select username from employee where username='%s'" %(request.form["username"])
+    existing_usernames2 = sql_query(sql_string)
+    
+    # return to landing page, taken username
+    if len(existing_usernames1) != 0 or len(existing_usernames2) != 0:
+        return render_template('landing.html', success="Username already taken.");
+    
     sql_string = "insert into customer (name, credit_card_num, street_address, city, state, username, password) values ('%s', %s, '%s', '%s', '%s', '%s', '%s')" % (request.form["name"], request.form["credit_card_num"], request.form["street_address"], request.form["city"], request.form["state"], request.form["username"], request.form["password"])
 
     sql_execute(sql_string)
@@ -60,14 +62,16 @@ def customer_register():
 def employee_register():
     print(request.form)
     # check no duplicate username
-    sql_string = "select username from employee"
-    existing_usernames = sql_query(sql_string)
+    sql_string = "select username from employee where username='%s'" %(request.form["username"])
+    existing_usernames1 = sql_query(sql_string)
+
+    sql_string = "select username from customer where username='%s'" %(request.form["username"])
+    existing_usernames2 = sql_query(sql_string)
+
+    # return to landing page, taken username
+    if len(existing_usernames1) != 0 or len(existing_usernames2) != 0 :
+        return render_template('landing.html', success="Username already taken.")
     
-    for a in existing_usernames:
-        if request.form["username"] == a[0]:
-            # return to landing page, taken username
-            return render_template('landing.html', success="Username already taken.")
-        
     sql_string = "insert into employee (name, position, username, password) values ('%s', '%s', '%s', '%s')" %(request.form["name"], request.form["position"], request.form["username"], request.form["password"])
 
     sql_execute(sql_string)
@@ -105,6 +109,8 @@ def login():
 
 @app.route('/employee_dashboard.html', methods=['GET', 'POST'])
 def load_employee_dashboard():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
     template_data = load_session_info();
     template_data["position"] = session.get("position")
 
@@ -118,6 +124,8 @@ def load_employee_dashboard():
 
 @app.route('/show_stores.html', methods=['GET', 'POST'])
 def show_stores():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
     template_data = load_session_info();
     template_data["position"] = session.get("position")
 
@@ -128,6 +136,8 @@ def show_stores():
 
 @app.route('/view_store.html', methods=['GET', 'POST'])
 def view_store():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
     template_data = load_session_info();
     template_data["position"] = session.get("position")
 
@@ -140,6 +150,8 @@ def view_store():
 
 @app.route('/create_store.html', methods=['GET', 'POST'])
 def create_store():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
     template_data = load_session_info();
     template_data["position"] = session.get("position")
     
@@ -154,7 +166,100 @@ def create_store():
     # render form to choose store name
     else:
         return render_template('create_store.html', data = template_data)
+
+
+@app.route('/new_item.html', methods=['GET', 'POST'])
+def create_item():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info()
+    template_data["position"] = session.get("position")
+
+    # create item using sql
+    if "item_name" in request.form:
+
+        # if decide to drop quantity column, change string
+        sql_string = "insert into items (name, price, quantity) values ('%s', '%s', 0)" %(request.form["item_name"], request.form["item_price"])
+        sql_execute(sql_string)
+
+        template_data['message'] = "Item created."
+        return render_template('employee_dashboard.html', data = template_data)
+    # render form to choose specify item
+    else:
+        return render_template('new_item.html', data = template_data)
+
+@app.route('/stock_item.html', methods=['GET', 'POST'])
+def stock_item():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info()
+    template_data["position"] = session.get("position")
+
+    # stock item using sql
+    if "item_id" in request.form:
+        item_id = request.form["item_id"]
+        
+        sql_string = "select id from location"
+        store_ids = sql_query(sql_string)
+        for store_id_tuple in store_ids:
+            store_id = store_id_tuple[0]
+            quantity_str = "%s_quantity" %(store_id)
+
+            item_quantity = request.form[quantity_str]
             
+            # obtain previous quantity
+            sql_string = "select quantity from stores where location_id=%s and item_id=%s" %(store_id, item_id)
+            prev_quantity_raw = sql_query(sql_string)
+
+            # this location does not currently store this item
+            if len(prev_quantity_raw) == 0:
+                new_quantity = int(item_quantity)
+                sql_string = "insert into stores (item_id, location_id, quantity) values (%s, %s, %s)" %(item_id, store_id, new_quantity)
+                sql_execute(sql_string)
+            else:
+                prev_quantity = prev_quantity_raw[0][0]
+                new_quantity = int(item_quantity) + int(prev_quantity)
+
+                # update new quantity in stores table
+                sql_string = "update stores set quantity=%s where location_id=%s and item_id=%s" %(new_quantity, store_id, item_id)
+                sql_execute(sql_string)
+        
+        template_data['message'] = "Stocked item."
+        return render_template('employee_dashboard.html', data = template_data)
+    # render form to stock
+    else:
+        sql_string = "select id, name from items"
+        template_data['item_list'] = sql_query(sql_string) # list of items
+
+        sql_string = "select id, name from location"
+        template_data['store_list'] = sql_query(sql_string) # list of stores
+        
+        return render_template('stock_item.html', data = template_data)
+
+@app.route('/trash_item.html', methods=['GET', 'POST'])
+def trash_item():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info()
+    template_data["position"] = session.get("position")
+
+    # render form to choose quantities
+    if "item_id" in request.form:
+        print("select quantities")
+        template_data['choose_item'] = False;
+        template_data['choose_quantities'] = True;
+
+        sql_string = "select"
+    # render form to choose item 
+    else:
+        sql_string = "select id, name from items"
+        template_data['item_list'] = sql_query(sql_string) # list of items        
+        template_data['choose_item'] = True;
+        
+        return render_template('trash_item.html', data = template_data)
+
+    return render_template('trash_item.html', data = template_data)
+
 @app.route('/logout.html', methods=['GET', 'POST'])
 def logout():
     session.clear()
@@ -166,6 +271,13 @@ def load_session_info():
     template_data["role"] = session.get("role")
 
     return template_data
+
+# redirects to landing page if access unauthorized
+def validate_employee():
+    return session.get("role") == "employee"
+
+def validate_customer():
+    return session.get("role") == "customer"
 
 #@app.route('/', methods=['GET', 'POST'])
 def template_response_with_data():
