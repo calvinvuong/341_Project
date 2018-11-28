@@ -116,6 +116,28 @@ def load_employee_dashboard():
     '''
     return render_template('employee_dashboard.html', data = template_data)
 
+@app.route('/show_stores.html', methods=['GET', 'POST'])
+def show_stores():
+    template_data = load_session_info();
+    template_data["position"] = session.get("position")
+
+    sql_string = "select id, name from location"
+    template_data["stores"] = sql_query(sql_string)
+
+    return render_template('show_stores.html', data = template_data)
+
+@app.route('/view_store.html', methods=['GET', 'POST'])
+def view_store():
+    template_data = load_session_info();
+    template_data["position"] = session.get("position")
+
+    store_id = request.form["store_id"]
+    # gather store information
+    sql_string = "select name, street_address, city, state from location where id=%s" %(store_id)
+    template_data["store_info"] = sql_query(sql_string)[0]
+
+    return render_template('view_store.html', data = template_data)
+
 @app.route('/create_store.html', methods=['GET', 'POST'])
 def create_store():
     template_data = load_session_info();

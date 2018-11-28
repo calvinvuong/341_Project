@@ -1,17 +1,27 @@
 <html>
     <head>
-        <title>Employee Dashboard</title>
+        <title>Store {{ data['store_info'][0] }}</title>
     </head>
     <body>
       <p> {{data['message']}} </p>
       <p> Hello. You are logged in as employee: {{data['name']}}, {{data['position']}} </p>
 
-      <form action="/create_store.html" method="post">
-	<button type="submit">Create a new store</button>
-      </form>
+      Store information:
+      <ul style="list-style: none">
+	{% for val in data['store_info'] %}
+	<li>
+	  {{ val }}
+	</li>
+	{% endfor %}
+      </ul>
 
+        
       <form action="/show_stores.html" method="post">
 	<button type="submit">Show stores</button>
+      </form>
+      
+      <form action="/employee_dashboard.html" method="post">
+	<button type="submit">Return dashboard</button>
       </form>
       
       <form action="/logout.html" method="post">
