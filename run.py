@@ -206,7 +206,32 @@ def stock_item():
     # stock item using sql
     if "item_id" in request.form:
         item_id = request.form["item_id"]
-        
+        print(request.form)
+
+        for store_id_raw, quantity in request.form.items():
+            if store_id_raw != "item_id": # ignore the key for store id
+                store_id = store_id_raw.split("_", 1)[0]
+
+                sql_string = "select quantity from stores where item_id=%s and location_id=%s" %( request.form["item_id"], store_id)
+                prev_quantity_raw = sql_query(sql_string)
+
+                quantity_str = "%s_quantity" %(store_id) 
+                item_quantity = request.form[quantity_str] # quantity to add
+
+                # this store does not currently store this item
+                if len(prev_quantity_raw) == 0:
+                    new_quantity = int(item_quantity)
+                    sql_string = "insert into stores (item_id, location_id, quantity) values (%s, %s, %s)" %(item_id, store_id, new_quantity)
+                    sql_execute(sql_string)
+                # store has this item, update
+                else:
+                    prev_quantity = prev_quantity_raw[0][0]
+                    new_quantity = int(prev_quantity) + int(item_quantity)
+                    
+                    sql_string = "update stores set quantity=%s where item_id=%s and location_id=%s" %(new_quantity, request.form["item_id"], store_id)
+                    sql_execute(sql_string)
+                    
+        '''
         sql_string = "select id from location"
         store_ids = sql_query(sql_string)
         for store_id_tuple in store_ids:
@@ -221,7 +246,7 @@ def stock_item():
 
             # this location does not currently store this item
             if len(prev_quantity_raw) == 0:
-                new_quantity = int(item_quantity)
+        new_quantity = int(item_quantity)
                 sql_string = "insert into stores (item_id, location_id, quantity) values (%s, %s, %s)" %(item_id, store_id, new_quantity)
                 sql_execute(sql_string)
             else:
@@ -231,7 +256,7 @@ def stock_item():
                 # update new quantity in stores table
                 sql_string = "update stores set quantity=%s where location_id=%s and item_id=%s" %(new_quantity, store_id, item_id)
                 sql_execute(sql_string)
-        
+        '''
         template_data['message'] = "Stocked item."
         return render_template('employee_dashboard.html', data = template_data)
     # render form to stock
