@@ -16,32 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `allowed`
---
-
-DROP TABLE IF EXISTS `allowed`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `allowed` (
-  `employee_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
-  PRIMARY KEY (`employee_id`,`permission_id`),
-  KEY `permission_id` (`permission_id`),
-  CONSTRAINT `allowed_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`),
-  CONSTRAINT `allowed_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `allowed`
---
-
-LOCK TABLES `allowed` WRITE;
-/*!40000 ALTER TABLE `allowed` DISABLE KEYS */;
-/*!40000 ALTER TABLE `allowed` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `bought_items`
 --
 
@@ -183,29 +157,6 @@ INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff',36.16
 UNLOCK TABLES;
 
 --
--- Table structure for table `permission`
---
-
-DROP TABLE IF EXISTS `permission`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `permission` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `permission`
---
-
-LOCK TABLES `permission` WRITE;
-/*!40000 ALTER TABLE `permission` DISABLE KEYS */;
-/*!40000 ALTER TABLE `permission` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `stores`
 --
 
@@ -268,4 +219,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-28 22:22:42
+-- Dump completed on 2018-11-28 22:30:41
