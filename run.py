@@ -147,6 +147,9 @@ def view_store():
     sql_string = "select name, street_address, city, state from location where id=%s" %(store_id)
     template_data["store_info"] = sql_query(sql_string)[0]
 
+    sql_string = "select revenue from location where id=%s" %(store_id)
+    template_data["revenue"] = sql_query(sql_string)[0][0]
+    
     # display list of items, quantity, and price
     sql_string = '''select name, stores.quantity, price
 from stores cross join items
