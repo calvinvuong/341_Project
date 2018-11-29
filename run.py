@@ -102,7 +102,8 @@ def login():
             
         # add position if user is an employee
         if request.form["role"] == "customer":
-            return render_template('customer_dashboard.html', name=session["name"])#name=request.form["name"])
+            return load_customer_dashboard()
+            #return render_template('customer_dashboard.html', name=session["name"])#name=request.form["name"])
         elif request.form["role"] == "employee":
             return load_employee_dashboard()
             #return render_template('employee_dashboard.html', name=session["name"])#name=request.form["name"])
@@ -233,32 +234,6 @@ def stock_item():
                     sql_string = "update stores set quantity=%s where item_id=%s and location_id=%s" %(new_quantity, request.form["item_id"], store_id)
                     sql_execute(sql_string)
                     
-        '''
-        sql_string = "select id from location"
-        store_ids = sql_query(sql_string)
-        for store_id_tuple in store_ids:
-            store_id = store_id_tuple[0]
-            quantity_str = "%s_quantity" %(store_id)
-
-            item_quantity = request.form[quantity_str]
-            
-            # obtain previous quantity
-            sql_string = "select quantity from stores where location_id=%s and item_id=%s" %(store_id, item_id)
-            prev_quantity_raw = sql_query(sql_string)
-
-            # this location does not currently store this item
-            if len(prev_quantity_raw) == 0:
-        new_quantity = int(item_quantity)
-                sql_string = "insert into stores (item_id, location_id, quantity) values (%s, %s, %s)" %(item_id, store_id, new_quantity)
-                sql_execute(sql_string)
-            else:
-                prev_quantity = prev_quantity_raw[0][0]
-                new_quantity = int(item_quantity) + int(prev_quantity)
-
-                # update new quantity in stores table
-                sql_string = "update stores set quantity=%s where location_id=%s and item_id=%s" %(new_quantity, store_id, item_id)
-                sql_execute(sql_string)
-        '''
         template_data['message'] = "Stocked item."
         return render_template('employee_dashboard.html', data = template_data)
     # render form to stock
@@ -332,6 +307,89 @@ where item_id=%s and location_id = location.id''' %(request.form["item_id"])
 
     return render_template('trash_item.html', data = template_data)
 
+
+# begin customer code
+
+@app.route('/customer_dashboard.html', methods=['GET', 'POST'])
+def load_customer_dashboard(message=""):
+    if validate_customer() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info();
+    template_data["position"] = session.get("position")
+    template_data["message"] = message
+    
+    # get list of stores
+    sql_string = "select id, name from location"
+    template_data['store_id_name'] = sql_query(sql_string)
+    
+    return render_template('customer_dashboard.html', data = template_data)
+
+@app.route('/purchase_items.html', methods=['GET', 'POST'])
+def show_items_to_purchase():
+    if validate_customer() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info()
+    
+    # get list of items, stock, and price to purchase
+    sql_string = '''select item_id, name, price, quantity 
+from stores cross join items
+where location_id=%s and items.id=item_id''' %(request.form["store_id"])
+    template_data['item_info'] = sql_query(sql_string)
+    template_data['store_id'] = request.form["store_id"]
+    
+    return render_template('purchase_items.html', data = template_data)
+
+@app.route('/process_purchase.html', methods=['GET', 'POST'])
+def process_purchase():
+    if validate_customer() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info()
+    customer_id = template_data["user_id"]
+
+    store_id = request.form["store_id"]
+    purchase_price = 0.00
+    
+    for item_id_raw, quantity in request.form.items():
+        if item_id_raw != "store_id" and int(quantity) != 0: # ignore key for item_id or if not purchased
+            item_id = item_id_raw.split("_", 1)[0]
+
+            sql_string = "select quantity from stores where item_id=%s and location_id=%s" %(item_id, store_id)
+
+            prev_quantity = sql_query(sql_string)[0][0]
+
+            quantity_str = "%s_quantity" %(item_id)
+            item_quantity = request.form[quantity_str] #quantity to purchase
+
+            new_quantity = int(prev_quantity) - int(item_quantity)
+            # remove purchased items from stores table
+            # if all items purchased, remove item from stores table
+            if new_quantity <= 0:
+                item_quantity = prev_quantity
+                sql_string = "delete from stores where item_id=%s and location_id=%s" %(item_id, store_id)
+                sql_execute(sql_string)
+            else:
+                sql_string = "update stores set quantity=%s where item_id=%s and location_id=%s" %(new_quantity, item_id, store_id)
+                sql_execute(sql_string)
+
+            # add purchased items to bought_items table
+            # get price of item
+            sql_string = "select price from items where id=%s" %(item_id)
+            price = sql_query(sql_string)[0][0]
+            # update price of entire purchase
+            purchase_price += float(price) * int(item_quantity)
+            # insert purchase into bought_items table
+            sql_string = "insert into bought_items (customer_id, item_id, quantity, purchase_price) values (%s, %s, %s, %s)" %(customer_id, item_id, item_quantity, float(price) * int(item_quantity))
+            sql_execute(sql_string)
+
+    # update store location revenue
+    sql_string = "select revenue from location where id=%s" %(store_id)
+    prev_revenue = float(sql_query(sql_string)[0][0])
+
+    sql_string = "update location set revenue=%s where id=%s" %( (prev_revenue + purchase_price), store_id)
+    sql_execute(sql_string)
+    
+    return load_customer_dashboard(message="Purchase successful. $%s charged to your crdit card." %(purchase_price))
+    
 @app.route('/logout.html', methods=['GET', 'POST'])
 def logout():
     session.clear()
@@ -341,7 +399,8 @@ def load_session_info():
     template_data = {}
     template_data["name"] = session.get("name")
     template_data["role"] = session.get("role")
-
+    template_data["user_id"] = session.get("id")
+    
     return template_data
 
 # redirects to landing page if access unauthorized
