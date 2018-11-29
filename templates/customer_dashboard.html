@@ -13,9 +13,12 @@
 	  <option value="{{ store[0] }}">{{ store[1] }}</option>
 	  {% endfor %}
 	</select> <br>
-	<button type="submit">View items for store</button>
+	<button type="submit">View items from store</button>
       </form>
 
+      <form action="/view_history.html" method="post">
+	<button type="submit">View Purchase History</button>
+      </form>
 
       <form action="/logout.html" method="post">
 	<button type="submit">Logout</button>

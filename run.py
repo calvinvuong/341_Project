@@ -392,7 +392,26 @@ def process_purchase():
     sql_execute(sql_string)
     
     return load_customer_dashboard(message="Purchase successful. $%s charged to your crdit card." %(purchase_price))
+
+@app.route('/view_history.html', methods=['GET', 'POST'])
+def view_purchase_history():
+    if validate_customer() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info()
+    customer_id = template_data["user_id"]
+
+    # get history
+    sql_string = "select name, quantity, purchase_price from bought_items cross join items where item_id=items.id and customer_id=%s" %(int(customer_id))
+    template_data['history'] = sql_query(sql_string)
+
+    # get total spent to date
+    # ANALYTIC QUERY
+    sql_string = "select sum(purchase_price) from bought_items where customer_id=%s" %(customer_id)
+    template_data["total_spent"] = sql_query(sql_string)[0][0]
     
+    return render_template('show_history.html', data = template_data)
+
+
 @app.route('/logout.html', methods=['GET', 'POST'])
 def logout():
     session.clear()
