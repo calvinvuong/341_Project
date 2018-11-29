@@ -187,7 +187,7 @@ def create_item():
     if "item_name" in request.form:
 
         # if decide to drop quantity column, change string
-        sql_string = "insert into items (name, price, quantity) values ('%s', '%s', 0)" %(request.form["item_name"], request.form["item_price"])
+        sql_string = "insert into items (name, price) values ('%s', '%s')" %(request.form["item_name"], request.form["item_price"])
         sql_execute(sql_string)
 
         template_data['message'] = "Item created."
@@ -222,7 +222,9 @@ def stock_item():
                 if len(prev_quantity_raw) == 0:
                     new_quantity = int(item_quantity)
                     sql_string = "insert into stores (item_id, location_id, quantity) values (%s, %s, %s)" %(item_id, store_id, new_quantity)
-                    sql_execute(sql_string)
+                    # no change 
+                    if new_quantity != 0:
+                        sql_execute(sql_string)
                 # store has this item, update
                 else:
                     prev_quantity = prev_quantity_raw[0][0]
