@@ -33,7 +33,7 @@ CREATE TABLE `bought_items` (
   KEY `item_id` (`item_id`),
   CONSTRAINT `bought_items_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
   CONSTRAINT `bought_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `bought_items` (
 
 LOCK TABLES `bought_items` WRITE;
 /*!40000 ALTER TABLE `bought_items` DISABLE KEYS */;
-INSERT INTO `bought_items` VALUES (12,1,1,3,6.15),(13,1,2,2,2.06),(14,1,4,5,7.95),(15,1,5,10,10),(16,1,1,1,2.05),(17,1,2,1,1.03),(18,1,4,2,3.18),(19,1,3,2,10),(20,10,1,3,6.15),(21,10,2,3,3.09),(22,10,4,4,6.36),(23,10,5,5,5);
+INSERT INTO `bought_items` VALUES (12,1,1,3,6.15),(13,1,2,2,2.06),(14,1,4,5,7.95),(15,1,5,10,10),(16,1,1,1,2.05),(17,1,2,1,1.03),(18,1,4,2,3.18),(19,1,3,2,10),(20,10,1,3,6.15),(21,10,2,3,3.09),(22,10,4,4,6.36),(23,10,5,5,5),(24,1,2,10,10.3);
 /*!40000 ALTER TABLE `bought_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -115,7 +115,7 @@ CREATE TABLE `items` (
   `name` varchar(25) DEFAULT NULL,
   `price` float DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +124,7 @@ CREATE TABLE `items` (
 
 LOCK TABLES `items` WRITE;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
-INSERT INTO `items` VALUES (1,'Milk',2.05),(2,'Corn',1.03),(3,'Baloney',5),(4,'Chips',1.59),(5,'Pencil',1);
+INSERT INTO `items` VALUES (1,'Milk',2.05),(2,'Corn',1.03),(3,'Baloney',5),(4,'Chips',1.59),(5,'Pencil',1),(6,'Water',0.05);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,7 +143,7 @@ CREATE TABLE `location` (
   `name` varchar(25) DEFAULT NULL,
   `revenue` float DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +152,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff',36.16),(2,'euclid','Cleveland','OH','kenko',6.26),(3,'fields','Cleveland','OH','costco',20.6);
+INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff',36.16),(2,'euclid','Cleveland','OH','kenko',6.26),(3,'fields','Cleveland','OH','costco',20.6),(4,'Belcher St','Wharf','NJ','Bobs Burgers',10.3);
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,7 +180,7 @@ CREATE TABLE `stores` (
 
 LOCK TABLES `stores` WRITE;
 /*!40000 ALTER TABLE `stores` DISABLE KEYS */;
-INSERT INTO `stores` VALUES (1,1,5),(1,3,5),(2,1,6),(2,3,30),(3,2,1),(3,3,2),(4,1,85),(4,2,25),(4,3,20),(5,1,15),(5,3,185);
+INSERT INTO `stores` VALUES (1,1,35),(1,2,39),(1,3,15),(2,1,96),(2,2,30),(2,3,130),(2,4,34),(3,1,10),(3,2,6),(3,3,12),(4,1,85),(4,2,25),(4,3,20),(5,1,30),(5,2,349),(5,3,219),(6,1,50),(6,2,100),(6,3,500);
 /*!40000 ALTER TABLE `stores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,4 +219,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-28 22:30:41
+-- Dump completed on 2018-11-29  2:43:58
