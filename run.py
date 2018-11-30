@@ -450,6 +450,7 @@ def view_purchase_history():
     # ANALYTIC QUERY
     sql_string = "select sum(purchase_price) from bought_items where customer_id=%s" %(customer_id)
     template_data["total_spent"] = sql_query(sql_string)[0][0]
+    template_data["total_spent"] = round(float(template_data["total_spent"]),2)
     
     return render_template('show_history.html', data = template_data)
 
