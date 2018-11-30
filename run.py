@@ -311,6 +311,48 @@ where item_id=%s and location_id = location.id''' %(request.form["item_id"])
     return render_template('trash_item.html', data = template_data)
 
 
+# begin analytic query code
+@app.route('/view_analytics.html', methods=['GET', 'POST'])
+def view_analytics():
+    if validate_employee() == False:
+        return render_template('landing.html', success='Invalid authorization.')
+    template_data = load_session_info()
+    template_data["position"] = session.get("position")
+
+    # get most popular item
+    sql_string = "select name, sum(quantity) as q from ( bought_items cross join items ) where id=item_id group by item_id order by q desc;"
+
+    item_ranked_popularity = sql_query(sql_string)
+    if ( len(item_ranked_popularity) > 0 ):
+        popular_item = item_ranked_popularity[0][0]
+    else:
+        popular_item = "No items."
+    template_data["popular_item"] = popular_item
+
+
+    # get most profitable item
+    sql_string = "select name, sum(purchase_price) as q from ( bought_items cross join items ) where id=item_id group by item_id order by q desc;"
+
+    item_ranked_profit = sql_query(sql_string)
+    if ( len(item_ranked_profit) > 0 ):
+        profitable_item = item_ranked_profit[0][0]
+    else:
+        profitable_item = "No items."
+    template_data["profitable_item"] = profitable_item
+
+    # get best (most profitable) customer
+    sql_string = "select name, customer_id, sum(purchase_price) as q from ( bought_items cross join customer ) where id=customer_id group by customer_id order by q desc;"
+
+    customer_ranked = sql_query(sql_string)
+    if ( len(customer_ranked) > 0 ):
+        best_customer = customer_ranked[0][0]
+    else:
+        best_customer = "No customers."
+    template_data["best_customer"] = best_customer
+    
+    return render_template('view_analytics.html', data = template_data)
+
+
 # begin customer code
 
 @app.route('/customer_dashboard.html', methods=['GET', 'POST'])

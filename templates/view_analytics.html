@@ -1,29 +1,24 @@
 <html>
     <head>
-        <title>Customer Dashboard</title>
+        <title>Analytics</title>
     </head>
     <body>
-      <p> {{ data['message'] }} </p>
-      <p> Hello. You are logged in as customer: {{data['name']}} ID: {{data['user_id']}} </p>
+      <p> {{data['message']}} </p>
+      <p> Hello. You are logged in as employee: {{data['name']}}, {{data['position']}} </p>
 
-      <form action="/purchase_items.html" method="post">
-	Choose store to purchase from:
-	<select name="store_id">
-	  {% for store in data['store_id_name'] %}
-	  <option value="{{ store[0] }}">{{ store[1] }}</option>
-	  {% endfor %}
-	</select> <br>
-	<button type="submit">Purchase items from store</button>
+      <ul>
+	<li> Most popular item: {{ data['popular_item'] }} </li>
+	<li> Most profitable item: {{ data['profitable_item'] }} </li>
+	<li> Best customer: {{ data['best_customer'] }} </li>
+      </ul>
+      
+      <form action="/employee_dashboard.html", method="post">
+	<button type="submit">Return to dashboard</button>
       </form>
-
-      <form action="/view_history.html" method="post">
-	<button type="submit">View Purchase History</button>
-      </form>
-
+      
       <form action="/logout.html" method="post">
 	<button type="submit">Logout</button>
       </form>
-
       
       {#<!--
         <p>Welcome to Big Jungle, an online store that just sells books.</p>
