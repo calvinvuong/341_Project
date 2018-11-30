@@ -33,7 +33,7 @@ CREATE TABLE `bought_items` (
   KEY `item_id` (`item_id`),
   CONSTRAINT `bought_items_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`id`),
   CONSTRAINT `bought_items_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +42,7 @@ CREATE TABLE `bought_items` (
 
 LOCK TABLES `bought_items` WRITE;
 /*!40000 ALTER TABLE `bought_items` DISABLE KEYS */;
-INSERT INTO `bought_items` VALUES (12,1,1,3,6.15),(13,1,2,2,2.06),(14,1,4,5,7.95),(15,1,5,10,10),(16,1,1,1,2.05),(17,1,2,1,1.03),(18,1,4,2,3.18),(19,1,3,2,10),(20,10,1,3,6.15),(21,10,2,3,3.09),(22,10,4,4,6.36),(23,10,5,5,5),(24,1,2,10,10.3);
+INSERT INTO `bought_items` VALUES (12,1,1,3,6.15),(13,1,2,2,2.06),(14,1,4,5,7.95),(15,1,5,10,10),(16,1,1,1,2.05),(17,1,2,1,1.03),(18,1,4,2,3.18),(19,1,3,2,10),(20,10,1,3,6.15),(21,10,2,3,3.09),(22,10,4,4,6.36),(23,10,5,5,5),(24,1,2,10,10.3),(25,1,2,20,20.6),(26,1,3,10,50),(27,1,5,100,100),(28,1,6,20,1),(29,1,6,330,16.5),(30,10,1,11,22.55),(31,10,2,9,9.27),(32,10,3,4,20),(33,10,4,12,19.08),(34,10,5,2,2),(35,10,6,8,0.4),(36,10,2,50,51.5),(37,10,4,10,15.9),(38,10,5,100,100);
 /*!40000 ALTER TABLE `bought_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -152,7 +152,7 @@ CREATE TABLE `location` (
 
 LOCK TABLES `location` WRITE;
 /*!40000 ALTER TABLE `location` DISABLE KEYS */;
-INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff',36.16),(2,'euclid','Cleveland','OH','kenko',6.26),(3,'fields','Cleveland','OH','costco',20.6),(4,'Belcher St','Wharf','NJ','Bobs Burgers',10.3);
+INSERT INTO `location` VALUES (1,'close by','Pawnee','IN','Food and Stuff',109.46),(2,'euclid','Cleveland','OH','kenko',6.26),(3,'fields','Cleveland','OH','costco',376.1),(4,'Belcher St','Wharf','NJ','Bobs Burgers',10.3);
 /*!40000 ALTER TABLE `location` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,7 +180,7 @@ CREATE TABLE `stores` (
 
 LOCK TABLES `stores` WRITE;
 /*!40000 ALTER TABLE `stores` DISABLE KEYS */;
-INSERT INTO `stores` VALUES (1,1,35),(1,2,39),(1,3,15),(2,1,96),(2,2,30),(2,3,130),(2,4,34),(3,1,10),(3,2,6),(3,3,12),(4,1,85),(4,2,25),(4,3,20),(5,1,30),(5,2,349),(5,3,219),(6,1,50),(6,2,100),(6,3,500);
+INSERT INTO `stores` VALUES (1,1,24),(1,2,39),(1,3,15),(2,1,87),(2,2,30),(2,3,60),(2,4,34),(3,1,6),(3,2,6),(3,3,2),(4,1,73),(4,2,25),(4,3,10),(5,1,28),(5,2,349),(5,3,19),(6,1,42),(6,2,100),(6,3,150);
 /*!40000 ALTER TABLE `stores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,4 +219,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-29  2:43:58
+-- Dump completed on 2018-11-29 19:35:35
