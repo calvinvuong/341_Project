@@ -1,42 +1,31 @@
 <html>
-    <head>
-        <title>Create Store</title>
-    </head>
-    <body>
-      <p> Hello. You are logged in as employee: {{data['name']}}, {{data['position']}} </p>
-
-      New store
-      <form action="/create_store.html" method="post">
-	Name:<input type="text" name="store_name"> <br>
-	Address:<input type="text" name="address"> <br>
-	City:<input type="text" name="city"> <br>
-	State:<input type="text" name="state"> <br>
-	<button type="submit">Create</button>
-      </form>
-      
-      <form action="/logout.html" method="post">
-	<button type="submit">Logout</button>
-      </form>
-      
-      {#<!--
-        <p>Welcome to Big Jungle, an online store that just sells books.</p>
-        <p>Here is a list of the books you can buy:</p>
-
-	<form action="." method="post">
-        {% if template_data['books']|length == 0 %}
-        <p style="color: red;">All books are sold out!</p>
-        {% else %}
-        <ul>
-            {% for book in template_data['books'] %}
-            <li>
-                {{ book[1] }}
-                <button name="buy-book" value="{{book[0]}}">buy</button>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        </form>
-	-->
-      #}
-    </body>
+	<head>
+		<title>Create Store</title>
+	<link rel="stylesheet" type="text/css" href="static/style.css">
+	</head>
+	<body bgcolor="#007099">
+		<div class="topnav">
+			<div class="topnav-left">Dashboard</div>
+			<a class="active" href="create_store.html">Create Store</a>
+			<a href="show_stores.html">Show Stores</a>
+			<a href="stock_item.html">Stock Item</a>
+			<a href="trash_item.html">Trash Item</a>
+			<a href="new_item.html">Create Item</a>
+			<a href="view_analytics.html">View Analytics</a>
+			<a class="topnav-right" href="logout.html">Logout</a>
+			<div class="topnav-right">Hello, {{data['name']}} (position: {{data['position']}})</div>
+		</div>
+		<form class="floating" action="/create_store.html" method="post">
+			<h2>Creating a New Store...</h2>
+			<label for="sname"><b>Store Name:</b></label>
+			<input name="store_name" type="text"><br>
+			<label for="sadd"><b>Store Address:</b></label>
+			<input name="address" type="text"><br>
+			<label for="scity"><b>City:</b></label><br>
+			<input type="text" name="city"><br>
+			<label for="sstate"><b>State:</b></label><br>
+			<input type="text" name="state"> <br>
+			<button type="submit">Create</button>
+		</form>
+	</body>
 </html>

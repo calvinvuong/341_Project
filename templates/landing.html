@@ -1,60 +1,66 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Home Page</title>
-    </head>
-    <body>
-      <p> {{success}} </p>
-      <h2> Create an account. </h2>
-      <h3>Customer account.</h3>
-      <form action="/register_customer.html" method="post">
-	Enter username: <input type="text" placeholder="enter" name="username"> <br>
-	Enter password: <input type="password" name="password"> <br>
-	Enter name: <input type="text" name="name"> <br>
-	Enter credit card num: <input type="text" name="credit_card_num"> <br>
-	Enter street address: <input type="text" name="street_address"> <br>
-	Enter city: <input type="text" name="city"> <br>
-	Enter state: <input type="text" name="state" maxlength="2"> <br>
-	<button type="submit">Create account</button>
-      </form>
-
-      <h3>Employee account.</h3>
-      <form action="/register_employee.html" method="post">
-	Enter username: <input type="text" placeholder="enter" name="username"> <br>
-	Enter password: <input type="password" name="password"> <br>
-	Enter name: <input type="text" name="name"> <br>
-	Account type: <input type="radio" name="position" value="retail">Retail
-	<input type="radio" name="position" value="manager">Manager<br>
-	<button type="submit">Create account</button>
-      </form>
-
-      <br> <br>
-      <h2>Login.</h2>
-      <form action="/login.html" method="post">
-	Enter username: <input type="text" placeholder="enter" name="username"> <br>
-	Enter password: <input type="password" name="password"> <br>
-	Account type: <input type="radio" name="role" value="customer">   Customer <input type="radio" name="role" value="employee"> Employee <br>
-	<button type="submit">Login</button>
-      </form>
-      
-      {#<!--
-        <p>Welcome to Big Jungle, an online store that just sells books.</p>
-        <p>Here is a list of the books you can buy:</p>
-
-	<form action="." method="post">
-        {% if template_data['books']|length == 0 %}
-        <p style="color: red;">All books are sold out!</p>
-        {% else %}
-        <ul>
-            {% for book in template_data['books'] %}
-            <li>
-                {{ book[1] }}
-                <button name="buy-book" value="{{book[0]}}">buy</button>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        </form>
-	-->
-      #}
-    </body>
+	<head>
+		<title>Home Page</title>
+		<link rel="stylesheet" type="text/css" href="static/style.css">
+	</head>
+	<body>
+    <div class="topnav">
+		<div class="topnav-left">Home Page</div>
+		<div class="topnav-right">Not Logined</div>
+	</div>
+		<button class="tablink" onclick="openPage('Login', this, '#007099')" id="defaultOpen">Login</button>
+		<button class="tablink" onclick="openPage('Customer_Register', this, '#007099')">Customer Register</button>
+		<button class="tablink" onclick="openPage('Employee_Register', this, '#007099')">Employee Register</button>
+		<div id="Login" class="tabcontent">
+			<h2>Login.</h2>
+			<form action="/login.html" method="post">
+				<label for="uname"><b>Enter username</b></label>
+				<input placeholder="enter" name="username" type="text"><br>
+				<label for="pswd"><b>Enter password: </b></label> <input name="password" type="password"><br>
+				<label for="acct_type"><b>Account type: </b></label><br>
+				<input name="role" value="customer" type="radio">Customer
+				<input name="role" value="employee" type="radio">Employee<br>
+				<button type="submit">Login</button>
+			</form>
+		</div>
+		<div id="Customer_Register" class="tabcontent">
+			<h2>Create an customer account.</h2>
+			<form action="/register_customer.html" method="post">
+				<label for="uname"><b>Enter username:</b></label>
+				<input placeholder="enter" name="username" type="text"><br>
+				<label for="pswd"><b>Enter password:</b></label>
+				<input name="password" type="password"><br>
+				<label for="name"><b>Enter name:</b></label>
+				<input name="name" type="text"><br>
+				<label for="creditcard"><b>Enter credit card num:</b></label>
+				<input name="credit_card_num" type="text"><br>
+				<label for="address"><b>Enter street address:</b></label>
+				<input name="street_address" type="text"><br>
+				<label for="city"><b>Enter city:</b></label>
+				<input name="city" type="text"><br>
+				<label for="state"><b>Enter state:</b></label>
+				<input name="state" maxlength="2" type="text"><br>
+				<button type="submit">Create account</button>
+			</form>
+		</div>
+		<div id="Employee_Register" class="tabcontent">
+			<h2>Create an employee account.</h2>
+			<form action="/register_employee.html" method="post">
+				<label for="uname"><b>Enter username:</b></label>
+				<input placeholder="enter" name="username" type="text"><br>
+				<label for="pswd"><b>Enter password:</b></label>
+				<input name="password" type="password"><br>
+				<label for="name"><b>Enter name:</b></label>
+				<input name="name" type="text"><br>
+				<label for="acct_type"><b>Account type:</b></label>
+				<input name="position" value="retail" type="radio">Retail
+				<input name="position" value="manager" type="radio">Manager<br>
+				<button type="submit">Create account</button>
+			</form>
+		</div>
+		<br>
+		<br>
+		<script src="static/landing.js"></script>
+	</body>
 </html>

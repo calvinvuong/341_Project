@@ -1,73 +1,57 @@
 <html>
-    <head>
-        <title>Stock Item</title>
-    </head>
-    <body>
-      <p> {{data['message']}} </p>
-      <p> Hello. You are logged in as employee: {{data['name']}}, {{data['position']}} </p>
-
-      {# choose item #}
-      {% if data['choose_item'] == True %}
-      <form action="/trash_item.html" method="post">
-	Select item:
-	<select name="item_id">
-	  {% for item in data['item_list'] %}
-	  <option value="{{ item[0] }}">{{ item[1] }}</option> <br>
-	  {% endfor %}
-	</select>
-	<button type="submit">Submit</button>
-      </form>
-
-      {# choose drop quantity for each store #}
-      {% elif data['choose_quantities'] == True %}
-
-      {% if data['store_quantities']|length == 0 %}
-      <p> The store does not carry this item. Nothing to drop. </p>
-      {% else %}
-      <form action="/trash_item.html" method="post">
-	Dropping item: {{ data['item_name'] }} <br>
-	Stores:
-	<ul>
-	  {% for tuple in data['store_quantities'] %}
-	  <li>
-	    {{ tuple[1] }} current stock: {{ tuple[2] }} <input type="number" name="{{ tuple[0] }}_quantity" min="0" max="{{ tuple[2] }}" value="0">
-	  </li>
-	  {% endfor %}
-	</ul>
-	<input type="hidden" name="ready to drop" value="true">
-	<input type="hidden" name="item_id" value="{{ data['item_id'] }}">
-	<button type="submit">Submit</button>
-      </form>
-      {% endif %}
-      {% endif %}
-      
-      <form action="/employee_dashboard.html" method="post">
-	<button type="submit">Return dashboard</button>
-      </form>
-      
-      <form action="/logout.html" method="post">
-	<button type="submit">Logout</button>
-      </form>
-      
-      {#<!--
-        <p>Welcome to Big Jungle, an online store that just sells books.</p>
-        <p>Here is a list of the books you can buy:</p>
-
-	<form action="." method="post">
-        {% if template_data['books']|length == 0 %}
-        <p style="color: red;">All books are sold out!</p>
-        {% else %}
-        <ul>
-            {% for book in template_data['books'] %}
-            <li>
-                {{ book[1] }}
-                <button name="buy-book" value="{{book[0]}}">buy</button>
-            </li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        </form>
-	-->
-      #}
-    </body>
+	<head>
+		<title>Stock Item</title>
+	<link rel="stylesheet" type="text/css" href="static/style.css">
+	</head>
+	<body bgcolor="#007099">
+		<div class="topnav">
+			<div class="topnav-left">Dashboard</div>
+			<a href="create_store.html">Create Store</a>
+			<a href="show_stores.html">Show Stores</a>
+			<a href="stock_item.html">Stock Item</a>
+			<a class="active" href="trash_item.html">Trash Item</a>
+			<a href="new_item.html">Create Item</a>
+			<a href="view_analytics.html">View Analytics</a>
+			<a class="topnav-right" href="logout.html">Logout</a>
+			<div class="topnav-right">Hello, {{data['name']}} (position: {{data['position']}})</div>
+		</div>
+		<p style="color:ivory"> {{ data['message'] }} </p>
+		{# choose item #}
+		{% if data['choose_item'] == True %}
+		<form class="floating" action="/trash_item.html" method="post">
+			<label for="sname"><b>Select item:</b></label>
+			<div class="custom-select" style="width:90%">
+				<select name="item_id">
+					<option value="-1">Choose Item...</option>
+					{% for item in data['item_list'] %}
+					<option value="{{ item[0] }}">{{ item[1] }}</option>
+					{% endfor %}
+				</select><br>
+			</div>
+			<br>
+			<button type="submit">Submit</button>
+		</form>
+		{# choose drop quantity for each store #}
+		{% elif data['choose_quantities'] == True %}
+		{% if data['store_quantities']|length == 0 %}
+		<p> The store does not carry this item. Nothing to drop. </p>
+		{% else %}
+		<form class="floating" action="/trash_item.html" method="post">
+			Dropping item: {{ data['item_name'] }}<br>
+			Stores:
+			<ul>
+				{% for tuple in data['store_quantities'] %}
+				<li>
+					{{ tuple[1] }} current stock: {{ tuple[2] }} <input type="number" name="{{ tuple[0] }}_quantity" min="0" max="{{ tuple[2] }}" value="0">
+				</li>
+				{% endfor %}
+			</ul>
+			<input type="hidden" name="ready to drop" value="true">
+			<input type="hidden" name="item_id" value="{{ data['item_id'] }}">
+			<button type="submit">Submit</button>
+		</form>
+		{% endif %}
+		{% endif %}
+		<script src="static/customer_dashboard.js"></script>
+	</body>
 </html>
