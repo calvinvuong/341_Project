@@ -37,15 +37,28 @@
 		<p> The store does not carry this item. Nothing to drop. </p>
 		{% else %}
 		<form class="floating" action="/trash_item.html" method="post">
-			Dropping item: {{ data['item_name'] }}<br>
-			Stores:
-			<ul>
+			<p>Dropping item: {{ data['item_name'] }}<br>
+			<div class="itemlist">
+				<div class="itemname">
+					<label for="iname" style="color:peru"><b>Store Name</b></label>
+				</div>
+				<div class="amounttopurchase">
+					<label for="iprice" style="color:peru"><b>Amount to Trash</b></label>
+				</div>
 				{% for tuple in data['store_quantities'] %}
-				<li>
-					{{ tuple[1] }} current stock: {{ tuple[2] }} <input type="number" name="{{ tuple[0] }}_quantity" min="0" max="{{ tuple[2] }}" value="0">
-				</li>
+				<div class="itemrow">
+					<div class="itemname">
+						<label for="iname"><b>{{ tuple[1] }}</b></label>
+					</div>
+					<div class="amounttopurchase">
+						<input type="number" name="{{ tuple[0] }}_quantity" min="0" max="{{ tuple[2] }}" value="0">
+					</div>
+					<div class="itemstatus">
+						<label for="istatus"><b>Current Stock: {{ tuple[2] }}</b></label>
+					</div>
+				</div>
 				{% endfor %}
-			</ul>
+			</div>
 			<input type="hidden" name="ready to drop" value="true">
 			<input type="hidden" name="item_id" value="{{ data['item_id'] }}">
 			<button type="submit">Submit</button>
